@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: simple-app-deployment
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: simple-app-label
+  template:
+    metadata:
+      labels:
+        app: simple-app-label
+    spec:
+      containers:
+        - name: simple-app
+          image: paulbel/microservice:latest
+          ports:
+            - containerPort: 8000
