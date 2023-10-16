@@ -2,8 +2,7 @@ apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   annotations:
-    nginx.ingress.kubernetes.io/configuration-snippet: |
-      rewrite ^/otusapp/.+/(.*)$ /$1 break;
+    nginx.ingress.kubernetes.io/rewrite-target: /$1
   name: simple-app-ingress
 spec:
   ingressClassName: nginx
@@ -11,8 +10,15 @@ spec:
     - host: "arch.homework"
       http:
         paths:
-          - path: /
-            pathType: Prefix
+          - path: /otusapp/.+/(.*)
+            pathType: ImplementationSpecific
+            backend:
+              service:
+                name: simple-app-service
+                port:
+                  number: 8000
+          - path: /(.+)
+            pathType: ImplementationSpecific
             backend:
               service:
                 name: simple-app-service
